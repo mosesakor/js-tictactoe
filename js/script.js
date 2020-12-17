@@ -14,13 +14,6 @@ const gameBoard = (function() {
   ["", "", ""],
   ["", "", ""]];
 
-  const resetBoard = () => {
-    for (let i = 0; i < board.length; i++) {
-      for (let j = 0; j < board[i].length; j++) {
-        board[i][j] = ""
-      }
-    }
-  }
 
   const id_to_coordinate = () => [[0, 0], [0, 1], [0, 2],
                                   [1, 0], [1, 1], [1, 2],
@@ -92,7 +85,10 @@ const game = (function() {
       renderBoard();
       if (gameOver(gameBoard.board)) {
         table.onclick = '';
-        gameOverMessage(other_player);
+        gameOverMessage(other_player, false);
+      } else if (stalemate(gameBoard.board)) {
+        table.onclick = '';
+        gameOverMessage(other_player, true)
       }
     }
   }
@@ -102,6 +98,14 @@ const game = (function() {
     message.textContent = `${player.name}'s turn `
   }
 
+  const stalemate = (board) => {
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 0; j < board[i].length; j++) {
+        if (board[i][j] == '') return false;
+      }
+    }
+    return true;
+  }
 
   const gameOver = (board) => {
     return(rowCrossed(board) || columnCrossed(board) || diagonalCrossed(board) ); 
@@ -140,7 +144,7 @@ const game = (function() {
     return false;
   }
 
-  const gameOverMessage = (player) => {
+  const gameOverMessage = (player, tie) => {
     const message = document.getElementById('messages')
     const winner = document.createElement('p');
     const resetBtn = document.createElement('button');
@@ -148,8 +152,8 @@ const game = (function() {
     message.appendChild(winner);
     message.appendChild(resetBtn);
 
-    winner.textContent = `${player.name} wins!`;
-    resetBtn.textContent = 'Play again';
+    tie == false ? winner.textContent = `${player.name} wins!`: winner.textContent = "It's a tie";
+    resetBtn.textContent = "Play again";
     
     resetBtn.onclick = function(e) {
       resetGame();
