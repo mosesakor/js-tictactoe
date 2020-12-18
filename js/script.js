@@ -6,13 +6,10 @@ const Player = (name, symbol) => {
 const gameBoard = (function() {
   'use strict';
 
-  const DEFAULT_BOARD =  [["", "", ""],
-                          ["", "", ""],
-                          ["", "", ""]];
 
   let board = [["", "", ""],
-  ["", "", ""],
-  ["", "", ""]];
+               ["", "", ""],
+               ["", "", ""]];
 
 
   const id_to_coordinate = () => [[0, 0], [0, 1], [0, 2],
@@ -36,7 +33,7 @@ const gameBoard = (function() {
     return board[x][y] == "" ? true : false;
   }
 
-  return {board, DEFAULT_BOARD, updateBoard, isEmptyCell};
+  return {board, updateBoard, isEmptyCell};
 
 })();
 
@@ -78,7 +75,6 @@ const game = (function() {
       togglePlayerTurn(other_player);
 
       if (gameBoard.isEmptyCell(parseInt(td.id))) {
-        console.log("a")
         updateBoard(parseInt(td.id), current_player.symbol)
       };
       swap_turns();
@@ -159,13 +155,6 @@ const game = (function() {
       resetGame();
     }
   }
-
-
-  const endGame = () => {
-    console.log(`${current_player.name}`)
-  }
-
-
 
   const updateBoard = (id, symbol) => {
     gameBoard.updateBoard(id, symbol)
